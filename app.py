@@ -138,39 +138,71 @@ if st.button("✅ 채점하기"):
 
     for title, result in results.items():
 
-    st.subheader(title)
-
-    for sub_title, sub_result in result.items():
-
-        st.markdown(
-            f"### {sub_title}"
-        )
-
-        st.write(
-            f"정확도 : {sub_result['정확도']}%"
-        )
-
-        col1, col2 = st.columns(2)
+        st.subheader(title)
 
 
-        with col1:
+        # 바로 채점 결과가 있는 경우
+        if "정확도" in result:
 
-            st.markdown("#### 정답")
-
-            st.markdown(
-                sub_result["정답_html"],
-                unsafe_allow_html=True
+            st.write(
+                f"정확도 : {result['정확도']}%"
             )
 
+            col1, col2 = st.columns(2)
 
-        with col2:
+            with col1:
 
-            st.markdown("#### 내 답")
+                st.markdown("#### 정답")
 
-            st.markdown(
-                sub_result["내 답_html"],
-                unsafe_allow_html=True
-            )
+                st.markdown(
+                    result["정답_html"],
+                    unsafe_allow_html=True
+                )
+
+            with col2:
+
+                st.markdown("#### 내 답")
+
+                st.markdown(
+                    result["내 답_html"],
+                    unsafe_allow_html=True
+                )
 
 
-        st.divider()
+            st.divider()
+
+
+        # 핵심 아이디어/내용 요소/성취기준처럼 묶인 경우
+        else:
+
+            for sub_title, sub_result in result.items():
+
+                st.markdown(
+                    f"### {sub_title}"
+                )
+
+                st.write(
+                    f"정확도 : {sub_result['정확도']}%"
+                )
+
+                col1, col2 = st.columns(2)
+
+                with col1:
+
+                    st.markdown("#### 정답")
+
+                    st.markdown(
+                        sub_result["정답_html"],
+                        unsafe_allow_html=True
+                    )
+
+                with col2:
+
+                    st.markdown("#### 내 답")
+
+                    st.markdown(
+                        sub_result["내 답_html"],
+                        unsafe_allow_html=True
+                    )
+
+                st.divider()
