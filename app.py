@@ -138,44 +138,44 @@ if st.button("✅ 채점하기"):
 
     for title, result in results.items():
 
-    # 전체 선택일 경우 (목표/미적체험/표현/감상)
-    if "정확도" not in result:
+         # 전체 선택일 경우 (목표/미적체험/표현/감상)
+        if "정확도" not in result:
 
-        st.subheader(title)
+            st.subheader(title)
 
-        for sub_title, sub_result in result.items():
+            for sub_title, sub_result in result.items():
 
-            st.markdown(f"### {sub_title}")
+                st.markdown(f"### {sub_title}")
 
-            st.write(
-                f"정확도 : {sub_result['정확도']}%"
-            )
-
-
-            col1, col2 = st.columns(2)
+                st.write(
+                    f"정확도 : {sub_result['정확도']}%"
+                )
 
 
-            with col1:
+                col1, col2 = st.columns(2)
 
-                st.markdown("#### 정답")
 
-                st.markdown(
+                with col1:
+
+                    st.markdown("#### 정답")
+
+                    st.markdown(
                     sub_result["정답_html"],
                     unsafe_allow_html=True
-                )
+                    )
 
 
-            with col2:
+                with col2:
 
-                st.markdown("#### 내 답")
+                    st.markdown("#### 내 답")
 
-                st.markdown(
+                    st.markdown(
                     sub_result["내 답_html"],
                     unsafe_allow_html=True
-                )
+                    )
 
 
-            st.divider()
+                st.divider()
 
 
     # 목표/영역 단독 선택
