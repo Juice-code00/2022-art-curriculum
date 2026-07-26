@@ -227,16 +227,33 @@ def grade_all(subject_data, answers):
         }
     )
 
-    # 영역
-    for key in subject_data:
+    # 나머지 영역
+    for area_name, area_data in subject_data.items():
 
-        if key == "목표":
+        if area_name == "목표":
             continue
 
-        result[key] = grade_area(
-            subject_data[key],
-            answers.get(key, {})
-        )
+        area_answers = answers.get(area_name, {})
+
+        result[area_name] = {}
+
+        if "핵심 아이디어" in area_data:
+            result[area_name]["핵심 아이디어"] = make_result(
+                "\n".join(area_data["핵심 아이디어"]),
+                area_answers.get("핵심 아이디어", "")
+            )
+
+        if "내용 요소" in area_data:
+            result[area_name]["내용 요소"] = make_result(
+                "\n".join(area_data["내용 요소"]),
+                area_answers.get("내용 요소", "")
+            )
+
+        if "성취기준" in area_data:
+            result[area_name]["성취기준"] = make_result(
+                "\n".join(area_data["성취기준"]),
+                area_answers.get("성취기준", "")
+            )
 
     return result
 
