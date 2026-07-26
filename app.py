@@ -18,12 +18,19 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+<style>
+a[href^="#"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.markdown(
     """
     <div style="text-align:center; margin-bottom:1rem;">
         <h2 style="margin-bottom:0;">
-            🖍️ 2022 미술과 교육과정 인출
+            🖍️ 미술과 교육과정
         </h2>
         <div style="color:#8c8c8c; font-size:0.95rem;">
             2022 개정 미술과 교육과정 인출 및 채점
