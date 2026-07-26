@@ -1,6 +1,6 @@
 # ==========================================
 # app.py
-# 2022 개정 미술과 교육과정 인출 프로그램
+# 2022 개정 미술과 교육과정 인출 채점기
 # ==========================================
 
 import streamlit as st
@@ -14,12 +14,24 @@ from grader import grade_web
 # ------------------------------------------
 
 st.set_page_config(
-    page_title="2022 개정 미술과 교육과정 인출 프로그램",
+    page_title="2022 개정 미술과 교육과정 인출 채점기",
     layout="wide"
 )
 
 
-st.title("🎨 2022 개정 미술과 교육과정 인출 프로그램")
+st.markdown(
+    """
+    <div style="text-align:center; margin-bottom:1rem;">
+        <h2 style="margin-bottom:0;">
+            🖍️ 2022 미술과 교육과정 인출
+        </h2>
+        <div style="color:#8c8c8c; font-size:0.95rem;">
+            2022 개정 미술과 교육과정 인출 및 채점
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # ------------------------------------------
@@ -57,47 +69,132 @@ st.divider()
 # 입력창 생성
 # ------------------------------------------
 
-st.header("📝 인출 답안 작성")
-
+st.markdown(
+    """
+    <h3 style="margin-bottom:0.5rem;">
+    📝 인출 답안 작성
+    </h3>
+    """,
+    unsafe_allow_html=True
+)
 
 answers = {}
 
-
 if section == "전체":
 
-    for key in curriculum[subject]:
+    for area_name, area_data in curriculum[subject].items():
 
-        st.subheader(key)
-
-        answers[key] = st.text_area(
-            f"{key} 내용을 입력하세요.",
-            height=200,
-            key=key
+        st.markdown(
+            f"""
+            <h4 style="margin-bottom:0.3rem;">
+            {area_name}
+            </h4>
+            """,
+            unsafe_allow_html=True
         )
 
+        # -------------------------
+        # 목표
+        # -------------------------
+
+        if area_name == "목표":
+
+            st.markdown("#### 총괄 목표")
+            st.caption("총괄 목표 내용을 줄 바꿈 없이 작성하세요.")
+
+            answers["총괄 목표"] = st.text_area(
+                label="",
+                height=180,
+                key="전체_총괄목표",
+                label_visibility="collapsed"
+            )
+
+            st.markdown("#### 세부 목표")
+            st.caption("세부 목표를 문장별로 줄을 바꾸어 작성하세요.")
+
+            answers["세부 목표"] = st.text_area(
+                label="",
+                height=250,
+                key="전체_세부목표",
+                label_visibility="collapsed"
+            )
+
+        # -------------------------
+        # 일반 영역
+        # -------------------------
+
+        else:
+
+            answers[area_name] = {}
+
+            for item in [
+                "핵심 아이디어",
+                "내용 요소",
+                "성취기준"
+            ]:
+
+                if item in area_data:
+
+                    st.markdown(f"#### {item}")
+
+                    if item == "핵심 아이디어":
+                        st.caption("핵심 아이디어를 문장별로 줄을 바꾸어 작성하세요.")
+
+                    elif item == "내용 요소":
+                        st.caption("각 내용 요소를 한 줄씩 구분하여 작성하세요.")
+
+                    elif item == "성취기준":
+                        st.caption("성취기준을 문장별로 줄을 바꾸어 작성하세요.")
+                        st.caption("※ [9미01-01]과 같은 성취기준 번호를 함께 작성하면 동일한 문장의 정확한 비교 및 채점에 도움됩니다.")
+
+                    answers[area_name][item] = st.text_area(
+                        label="",
+                        height=220,
+                        key=f"{area_name}_{item}",
+                        label_visibility="collapsed"
+                    )
+
+        st.divider()
 
 elif section == "목표":
 
-    st.subheader("총괄 목표")
+    st.markdown(
+        """
+        <h5 style="margin-bottom:0.3rem;">
+        총괄 목표
+        </h5>
+        """,
+        unsafe_allow_html=True
+    )
+    st.caption("총괄 목표 내용을 줄 바꿈 없이 작성하세요.")
 
     answers["총괄 목표"] = st.text_area(
-        "총괄 목표를 입력하세요.",
-        height=200
+        label="",
+        height=200,
+        key="총괄목표",
+        label_visibility="collapsed"
     )
 
-
-    st.subheader("세부 목표")
+    st.markdown(
+        """
+        <h5 style="margin-bottom:0.3rem;">
+        세부 목표
+        </h5>
+        """,
+        unsafe_allow_html=True
+    )
+    st.caption("세부 목표를 문장별로 줄을 바꾸어 작성하세요.")
 
     answers["세부 목표"] = st.text_area(
-        "세부 목표를 입력하세요.",
-        height=300
+        label="",
+        height=300,
+        key="세부목표",
+        label_visibility="collapsed"
     )
-
 
 else:
 
     area = curriculum[subject][section]
-
 
     for item in [
         "핵심 아이디어",
@@ -107,15 +204,31 @@ else:
 
         if item in area:
 
-            st.subheader(item)
-
-            answers[item] = st.text_area(
-                f"{item}를 입력하세요.",
-                height=250,
-                key=item
+            st.markdown(
+                f"""
+                <h5 style="margin-bottom:0.3rem;">
+                {item}
+                </h5>
+                """,
+                unsafe_allow_html=True
             )
 
+            if item == "핵심 아이디어":
+                st.caption("핵심 아이디어를 문장별로 줄을 바꾸어 작성하세요.")
 
+            elif item == "내용 요소":
+                st.caption("각 내용 요소를 한 줄씩 구분하여 작성하세요.")
+
+            elif item == "성취기준":
+                st.caption("성취기준을 문장별로 줄을 바꾸어 작성하세요.")
+                st.caption("※ [9미01-01]과 같은 성취기준 번호를 함께 작성하면 동일한 문장의 정확한 비교 및 채점에 도움됩니다.")
+
+            answers[item] = st.text_area(
+                label="",
+                height=250,
+                key=item,
+                label_visibility="collapsed"
+            )
 
 st.divider()
 
@@ -133,12 +246,26 @@ if st.button("✅ 채점하기"):
     )
 
 
-    st.header("📊 채점 결과")
+    st.markdown(
+        """
+        <h3 style="margin-bottom:0.5rem;">
+        📊 채점 결과
+        </h3>
+        """,
+        unsafe_allow_html=True
+    )
 
 
     for title, result in results.items():
 
-        st.subheader(title)
+        st.markdown(
+            f"""
+            <h4 style="margin-bottom:0.3rem;">
+            {title}
+            </h4>
+            """,
+            unsafe_allow_html=True
+        )
 
 
         # 바로 채점 결과가 있는 경우
@@ -178,7 +305,12 @@ if st.button("✅ 채점하기"):
             for sub_title, sub_result in result.items():
 
                 st.markdown(
-                    f"### {sub_title}"
+                    f"""
+                    <h4 style="margin-bottom:0.3rem;">
+                    {sub_title}
+                    </h4>
+                    """,
+                    unsafe_allow_html=True
                 )
 
                 st.write(

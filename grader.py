@@ -218,28 +218,25 @@ def grade_all(subject_data, answers):
 
     result = {}
 
-
     # 목표
-
     result["목표"] = grade_goal(
         subject_data["목표"],
-        answers
+        {
+            "총괄 목표": answers.get("총괄 목표", ""),
+            "세부 목표": answers.get("세부 목표", "")
+        }
     )
 
-
     # 영역
-
     for key in subject_data:
 
         if key == "목표":
             continue
 
-
         result[key] = grade_area(
             subject_data[key],
-            answers
+            answers.get(key, {})
         )
-
 
     return result
 
